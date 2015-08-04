@@ -1,7 +1,7 @@
-Roshambono
-==========
+Noshambo
+========
 
-Roshambono is roshambo (or Rock-Paper-Scissors) with no ties.
+Noshambo is roshambo (or Rock-Paper-Scissors) with no ties.
 
 Rock beats scissors, scissors beats paper, paper beats rock.
 
@@ -15,7 +15,7 @@ has played "Rock" more often wins. If both players have played
 "Rock" the same amount of times, she who played "Paper" more wins.
 
 You can write a robot by implementing the get\_play() function in 
-p\_robot/player.py:
+p\_robot/bot.py:
 
     def get_play(state) 
         
@@ -39,18 +39,18 @@ p\_robot/player.py:
 
 To play first to 100 rock against random:
 
-    $ git clone https://github.com/botfights/roshambono.git
-    $ cd roshambono
-    $ python roshambono.py play 100 p_rock p_random
+    $ git clone https://github.com/botfights/noshambo.git
+    $ cd noshambo
+    $ python noshambo.py play 100 p_rock p_random
 
-Next, edit p\_robot/player.py, implement get\_play(), then play your
+Next, edit p\_robot/bot.py, implement play(), then play your
 robot against the random:
 
-    $ python roshambono.py play 100 p_robot p_random
+    $ python noshambo.py play 100 p_robot p_random
 
 To play a round robin tournament of 100 games each to 1000:
-    
-    $ python roshambono.py tournament 100 1000 p_robot p_random p_rock p_paper p_scissors
+
+    $ python noshambo.py tournament 100 1000 p_robot p_random p_rock
 
 Have fun!
 
