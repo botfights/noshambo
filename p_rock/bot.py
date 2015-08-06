@@ -1,4 +1,4 @@
 # rock
 
-def play(player_id, last_play) :
+def play(my_id, her_id, last) :
     return 1

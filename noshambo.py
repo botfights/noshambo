@@ -23,13 +23,24 @@ BEATS       = [0,3,1,2]
 BEAT_BY     = [0,2,3,1]
 
 
+def get_play(player, my_id, her_id, last):
+    x = None
+    try:
+        x = player.get_play(my_id, her_id, last)
+    except:
+        pass
+    if not x in (1, 2, 3):
+        x = random.choice((1, 2, 3))
+    return x
+
+
 def play_game(race_to, player1, player2):
     wins = [0,0]
     plays = [[-1,0,0,0],[-1,0,0,0]]
     last_a = last_b = 0
     while 1 :
-        a_play = player1.get_play(last_a)
-        b_play = player2.get_play(last_b)
+        a_play = get_play(player1, player1.player_id, player2.player_id, last_a)
+        b_play = get_play(player2, player2.player_id, player1.player_id, last_b)
         ties = 0
         if a_play == b_play :
             ties += 1
@@ -68,20 +79,21 @@ def play_game(race_to, player1, player2):
 
 def play_tournament(t, n, players) :
     scores = {}
-    players = []
+    for i in range(len(players)):
+        scores[i] = 0
     for r in range(t) :
         for i in range(len(players)) :
             for j in range(len(players)) :
                 if i >= j :
                     continue
-                x = play_game(n,players[i],players[j],True)
+                x = play_game(n, players[i], players[j])
                 if 0 == x :
                     scores[i] += 1
                 else :
                     scores[j] += 1
-                logging.info('SCORE\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s' % (r,t,i,j,scores[i],scores[j],playernames[i],playernames[j]))
-        logging.info('STATUS\t%.2f\t\t%s' % (r/float(t),','.join(map(lambda i : '%s:%s' % (playernames[i],scores[i]),range(len(players))))))
-    logging.info('STATUS\t%.2f\t\t%s' % (100.0,','.join(map(lambda i : '%s:%s' % (playernames[i],scores[i]),range(len(players))))))
+                logging.info('SCORE\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s' % (r,t,i,j,scores[i],scores[j],players[i].playername,players[j].playername))
+        logging.info('BOTFIGHTS\t%.2f\t\t%s' % (r/float(t),','.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
+    logging.info('BOTFIGHTS\t%.2f\t\t%s' % (100.0,','.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
     return -1
 
 
@@ -133,7 +145,7 @@ def make_player(player_id, dirname):
         p.play = getattr(m, 'play')
     p.elapsed = 0.0
     p.calls = 0
-    p.get_play = lambda x: call_player(p, (p.player_id, x), random.choice((1, 2, 3)))
+    p.get_play = lambda x, y, z: call_player(p, (x, y, z), random.choice((1, 2, 3)))
     return p
 
 

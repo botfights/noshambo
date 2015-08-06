@@ -2,6 +2,6 @@
 
 import random
 
-def play(player_id, last_game):
-    return random.choice((1,2,3))
+def play(my_id, her_id, last):
+    return random.choice((1, 2, 3))
 

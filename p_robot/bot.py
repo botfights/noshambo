@@ -4,6 +4,6 @@
 # write a robot, or look at computer.py for
 # an example.
 
-def play(player_id, last_game):
+def play(my_id, her_id, last):
     return 0
 
