@@ -7,6 +7,7 @@ import imp
 import logging
 import random
 import time
+import getopt
 
 # ignore SIG_PIPE
 from signal import (signal,SIGPIPE,SIG_DFL)
@@ -22,29 +23,13 @@ BEATS       = [0,3,1,2]
 BEAT_BY     = [0,2,3,1]
 
 
-def get_play(f_get_play,state,catch_exceptions) :
-    play = 0
-    try :
-        play = int(f_get_play(state))
-    except KeyboardInterrupt :
-        raise
-    except :
-        if not catch_exceptions :
-            raise
-        logging.warn('caught exception "%s" calling %s \'s get_play() function' % (sys.exc_info()[1],str(f_get_play)))
-    if play < 1 or play > 3 :
-        play = random.randint(1,3)
-    logging.debug('LOG_PLAY\t%d\t%d\t%s' % (state,play,str(f_get_play)))
-    return play
-
-
-def play_game(race_to,f_get_play_a,f_get_play_b,catch_exceptions) :
+def play_game(race_to, player1, player2):
     wins = [0,0]
     plays = [[-1,0,0,0],[-1,0,0,0]]
     last_a = last_b = 0
     while 1 :
-        a_play = get_play(f_get_play_a,last_a,catch_exceptions)
-        b_play = get_play(f_get_play_b,last_b,catch_exceptions)
+        a_play = player1.get_play(last_a)
+        b_play = player2.get_play(last_b)
         ties = 0
         if a_play == b_play :
             ties += 1
@@ -81,13 +66,9 @@ def play_game(race_to,f_get_play_a,f_get_play_b,catch_exceptions) :
         if wins[1] == race_to :
             return 1
 
-def play_tourney(t,n,playernames) :
+def play_tournament(t, n, players) :
     scores = {}
     players = []
-    for i in playernames :
-        f = make_player(i,True)
-        scores[len(players)] = 0
-        players.append(f)
     for r in range(t) :
         for i in range(len(players)) :
             for j in range(len(players)) :
@@ -152,7 +133,7 @@ def make_player(player_id, dirname):
         p.play = getattr(m, 'play')
     p.elapsed = 0.0
     p.calls = 0
-    p.get_play = lambda x: call_player(p, (p.player_id, p.hand, x), 'F')
+    p.get_play = lambda x: call_player(p, (p.player_id, x), random.choice((1, 2, 3)))
     return p
 
 
@@ -235,13 +216,9 @@ def main(argv):
     elif 'game' == command:
         logging.basicConfig(level=log_level, format='%(message)s', 
                         stream=sys.stdout)
-        players = []
-        for player_id, playername in enumerate(args):
-            if verify_players:
-                if 0 != verify_player(playername):
-                    continue
-            players.append(make_player(chr(ord('a') + player_id), playername))
-        winner = play_game(players)
+        player1 = make_player('a', args[0])
+        player2 = make_player('b', args[1])
+        winner = play_game(race_to, player1, player2)
         sys.exit()
 
     elif 'tournament' == command:
@@ -249,11 +226,8 @@ def main(argv):
                         stream=sys.stdout)
         players = []
         for player_id, playername in enumerate(args):
-            if verify_players:
-                if 0 != verify_player(playername):
-                    continue
             players.append(make_player(chr(ord('a') + player_id), playername))
-        play_tournament(num_games, players)
+        play_tournament(race_to, num_games, players)
         sys.exit()
 
     else:
