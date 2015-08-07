@@ -14,10 +14,10 @@ For example, if both players play "Rock", then the player who
 has played "Rock" more often wins. If both players have played 
 "Rock" the same amount of times, she who played "Paper" more wins.
 
-You can write a robot by implementing the get\_play() function in 
+You can write a robot by implementing the play() function in 
 p\_robot/bot.py:
 
-    def get_play(state) 
+    def play(my_id, her_id, state) 
         
         return 1 for Rock, 2 for Paper, and 3 for Scissors.
     
@@ -46,11 +46,13 @@ To play first to 100 rock against random:
 Next, edit p\_robot/bot.py, implement play(), then play your
 robot against the random:
 
-    $ python noshambo.py play 100 p_robot p_random
+    $ python noshambo.py play p_robot p_random
 
 To play a round robin tournament of 100 games each to 1000:
 
-    $ python noshambo.py tournament 100 1000 p_robot p_random p_rock
+    $ python noshambo.py tournament --race-to=100 --num-games=1000 p_robot p_random p_rock
+
+Next, visit http://botfights.io/how-to-play to play against other bots on the net.
 
 Have fun!
 
