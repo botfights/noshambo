@@ -92,8 +92,8 @@ def play_tournament(t, n, players) :
                 else :
                     scores[j] += 1
                 logging.info('SCORE\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s' % (r,t,i,j,scores[i],scores[j],players[i].playername,players[j].playername))
-        logging.info('BOTFIGHTS\t%.2f\t\t%s' % (r/float(t),','.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
-    logging.info('BOTFIGHTS\t%.2f\t\t%s' % (100.0,','.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
+        logging.info('BOTFIGHTS\t%d\t%d\t%s' % (r, t,'\t'.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
+    logging.info('BOTFIGHTS\t%d\t%d\t%s' % (t, t,'\t'.join(map(lambda i : '%s:%s' % (players[i].playername,scores[i]),range(len(players))))))
     return -1
 
 
@@ -239,7 +239,7 @@ def main(argv):
         players = []
         for player_id, playername in enumerate(args):
             players.append(make_player(chr(ord('a') + player_id), playername))
-        play_tournament(race_to, num_games, players)
+        play_tournament(num_games, race_to, players)
         sys.exit()
 
     else:
