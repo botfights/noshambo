@@ -24,11 +24,7 @@ BEAT_BY     = [0,2,3,1]
 
 
 def get_play(player, my_id, her_id, last):
-    x = None
-    try:
-        x = player.get_play(my_id, her_id, last)
-    except:
-        pass
+    x = player.get_play(my_id, her_id, last)
     if not x in (1, 2, 3):
         x = random.choice((1, 2, 3))
     return x
