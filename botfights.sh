@@ -2,4 +2,4 @@
 
 # botfights.sh -- wrapper for botfights.io <=> noshambo
 
-python noshambo.py tournament --log-level=10 $@
+python noshambo.py tournament --catch-exceptions=on --log-level=10 $@
